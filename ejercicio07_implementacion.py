@@ -86,3 +86,6 @@ gestor.cerrar_incidente(incidente1, notificador)
 
 print("\n=== ESTADO FINAL ===")
 print(incidente1.resumen())
+
+print("\n--- Resumen de todos los incidentes ---")
+print(incidente1.resumen(), "\n", incidente2.resumen(), "\n", incidente3.resumen())
