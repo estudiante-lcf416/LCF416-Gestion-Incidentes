@@ -1,70 +1,54 @@
-from modelos.usuario import Usuario
 from modelos.incidente import Incidente
+from modelos.incidente_malware import IncidenteMalware
+from modelos.incidente_acceso import IncidenteAcceso
+from servicios.gestor_incidentes import GestorIncidentes
 from servicios.notificador import Notificador
 
 
-from servicios.gestor_incidentes import GestorIncidentes
-
-
-class GestorIncidentesAnterior:
-    def cerrar_incidente(self, incidente, notificador):
-        incidente.cerrar()
-        notificador.enviar(incidente)
-
-
-usuario1 = Usuario(1, "Ana Torres")
-usuario2 = Usuario(2, "Luis Pérez")
-
-incidente1 = Incidente(101, "Phishing", "Alta")
-incidente2 = Incidente(102, "Malware", "Media")
-incidente3 = Incidente(103, "Acceso no autorizado", "Critica")
-
-incidente1.asignar_responsable(usuario1)
-incidente2.asignar_responsable(usuario2)
-incidente3.asignar_responsable(usuario1)
-
-print("--- Usuarios ---")
-print(usuario1.resumen())
-print(usuario2.resumen())
-
-print("\n--- Incidentes iniciales ---")
-print(incidente1.resumen())
-print(incidente2.resumen())
-print(incidente3.resumen())
-
+# Crear el gestor
 gestor = GestorIncidentes()
-notificador = Notificador()
 
+# Crear incidentes de diferentes tipos
+incidente1 = Incidente(101, "Correo sospechoso", "Alta")
+
+incidente2 = IncidenteMalware(
+    102, "Equipo infectado", "Critica", "Troyano"
+)
+
+incidente3 = IncidenteAcceso(
+    103, "Intentos de acceso no autorizado",
+    "Media", "usuario01", 5
+)
+
+# Agregar incidentes al gestor
 gestor.agregar(incidente1)
 gestor.agregar(incidente2)
 gestor.agregar(incidente3)
 
-incidente4 = Incidente(104, "Robo de credenciales", "Baja")
-incidente5 = Incidente(105, "Ataque de ransomware", "Critica")
-incidente6 = Incidente(106, "Intento de acceso sospechoso", "Alta")
+# Mostrar reportes polimórficos
+print("\n--- REPORTES DE INCIDENTES ---")
+gestor.generar_reportes()
 
-gestor.agregar(incidente4)
-gestor.agregar(incidente5)
-gestor.agregar(incidente6)
+# Probar cierre y reapertura
+print("\n--- ESTADO DEL INCIDENTE ---")
+incidente1.cerrar()
+print(incidente1.generar_reporte())
 
-print("\n--- Conteo por gravedad ---")
-gestor.contar_por_gravedad()
+incidente1.reabrir()
+print(incidente1.generar_reporte())
 
-print("\n--- Prueba de eliminación ---")
-gestor.quitar(102)
+# Probar validación de gravedad
+print("\n--- PRUEBA DE VALIDACIÓN ---")
+try:
+    incidente1.gravedad = "Urgente"
+except ValueError as error:
+    print("Error controlado:", error)
 
-print("\n--- Incidentes después de eliminar ---")
-for incidente in gestor.listar():
-    print(incidente.resumen())
+# Probar ID duplicado
+print("\n--- PRUEBA DE ID DUPLICADO ---")
+gestor.agregar(incidente1)
 
-print("\n--- Prueba de ID duplicado ---")
-incidente_duplicado = Incidente(101, "Intento duplicado", "Baja")
-gestor.agregar(incidente_duplicado)
-
-print("\n--- Cierre de incidente ---")
-gestor.cerrar_incidente(incidente1, notificador)
-
-print("\n--- Resumen final ---")
-print(incidente1.resumen())
-print(incidente2.resumen())
-print(incidente3.resumen())
+# Probar notificador
+print("\n--- NOTIFICACIÓN ---")
+notificador = Notificador()
+gestor.cerrar_incidente(incidente2, notificador)

@@ -6,13 +6,18 @@ class GestorIncidentes:
         for existente in self.incidentes:
             if existente.id == incidente.id:
                 print("Error: ya existe un incidente con ese ID.")
-                return
+                return False
 
         self.incidentes.append(incidente)
         print("Incidente agregado correctamente.")
+        return True
 
     def listar(self):
         return self.incidentes
+
+    def generar_reportes(self):
+        for incidente in self.incidentes:
+            print(incidente.generar_reporte())
 
     def contar_por_gravedad(self):
         gravedades = ["Critica", "Alta", "Media", "Baja"]
@@ -39,3 +44,7 @@ class GestorIncidentes:
     def cerrar_incidente(self, incidente, notificador):
         incidente.cerrar()
         notificador.enviar(incidente)
+
+    def reabrir_incidente(self, incidente):
+        incidente.reabrir()
+        print("Incidente reabierto correctamente.")
