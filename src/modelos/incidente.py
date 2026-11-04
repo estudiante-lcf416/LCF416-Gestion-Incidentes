@@ -1,29 +1,35 @@
 class Incidente:
-    GRAVEDADES_VALIDAS = ["Critica", "Alta", "Media", "Baja"]
-
     def __init__(self, id, descripcion, gravedad):
-        if gravedad not in self.GRAVEDADES_VALIDAS:
-            raise ValueError("La gravedad no es válida")
-
         self.id = id
         self.descripcion = descripcion
         self.gravedad = gravedad
-        self.estado = "Abierto"
-        self.responsable = None
+        self._estado = "Abierto"
 
-    def asignar_responsable(self, usuario):
-        self.responsable = usuario
+    @property
+    def gravedad(self):
+        return self._gravedad
+
+    @gravedad.setter
+    def gravedad(self, valor):
+        if valor not in ["Baja", "Media", "Alta", "Critica"]:
+            raise ValueError("Gravedad no permitida")
+        self._gravedad = valor
+
+    @property
+    def estado(self):
+        return self._estado
 
     def cerrar(self):
-        self.estado = "Cerrado"
+        self._estado = "Cerrado"
 
-    def resumen(self):
-        nombre = (
-            self.responsable.nombre
-            if self.responsable else "Sin asignar"
-        )
+    def reabrir(self):
+        self._estado = "Abierto"
+
+    def generar_reporte(self):
         return (
             f"Incidente {self.id}: {self.descripcion} | "
-            f"Gravedad: {self.gravedad} | "
-            f"Estado: {self.estado} | Responsable: {nombre}"
+            f"Gravedad: {self.gravedad} | Estado: {self.estado}"
         )
+
+    def resumen(self):
+        return self.generar_reporte()
