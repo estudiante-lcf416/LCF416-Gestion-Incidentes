@@ -24,6 +24,10 @@ class Incidente:
 
     def reabrir(self):
         self._estado = "Abierto"
+        self.responsable = None
+
+    def asignar_responsable(self, usuario):
+        self.responsable = usuario
 
     def generar_reporte(self):
         return (
@@ -33,3 +37,4 @@ class Incidente:
 
     def resumen(self):
         return self.generar_reporte()
+    
