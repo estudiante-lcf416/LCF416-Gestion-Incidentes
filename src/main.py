@@ -3,6 +3,7 @@ from modelos.incidente_malware import IncidenteMalware
 from modelos.incidente_acceso import IncidenteAcceso
 from servicios.gestor_incidentes import GestorIncidentes
 from servicios.notificador import Notificador
+from modelos.usuario import Usuario
 
 
 # Crear el gestor
@@ -19,6 +20,10 @@ incidente3 = IncidenteAcceso(
     103, "Intentos de acceso no autorizado",
     "Media", "usuario01", 5
 )
+
+usuario1 = Usuario(1, "Ana Torres")
+incidente1.asignar_responsable(usuario1)
+print("Responsable:", incidente1.responsable.resumen())
 
 # Agregar incidentes al gestor
 gestor.agregar(incidente1)
