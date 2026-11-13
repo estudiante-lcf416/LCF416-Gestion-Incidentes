@@ -57,3 +57,14 @@ gestor.agregar(incidente1)
 print("\n--- NOTIFICACIÓN ---")
 notificador = Notificador()
 gestor.cerrar_incidente(incidente2, notificador)
+
+print("\n--- PRUEBA DE PENDIENTES PRIORIZADOS ---")
+
+pendientes = gestor.pendientes_priorizados()
+
+for incidente in pendientes:
+    print(
+        f"Incidente {incidente.id}: "
+        f"Gravedad: {incidente.gravedad} | "
+        f"Estado: {incidente.estado}"
+    )

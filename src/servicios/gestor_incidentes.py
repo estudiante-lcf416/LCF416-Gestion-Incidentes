@@ -48,3 +48,22 @@ class GestorIncidentes:
     def reabrir_incidente(self, incidente):
         incidente.reabrir()
         print("Incidente reabierto correctamente.")
+
+    def pendientes_priorizados(self):
+        prioridad = {
+            "Critica": 0,
+            "Alta": 1,
+            "Media": 2,
+            "Baja": 3
+        }
+
+        abiertos = [
+            incidente
+            for incidente in self.incidentes
+            if incidente.estado == "Abierto"
+        ]
+
+        return sorted(
+            abiertos,
+            key=lambda incidente: prioridad[incidente.gravedad]
+        )
